@@ -6,10 +6,10 @@ set(CMAKE_CXX_STANDARD 11)
 
 include(GNUInstallDirs)
 
-find_package(miniz REQUIRED)
+#find_package(miniz REQUIRED)
 
 add_library(OpenFBX src/ofbx.cpp)
-target_link_libraries(OpenFBX PRIVATE miniz::miniz)
+target_link_libraries(OpenFBX PRIVATE miniz)
 
 target_include_directories(OpenFBX
         PUBLIC
@@ -37,11 +37,11 @@ install(
         DESTINATION "${CMAKE_INSTALL_DATADIR}/openfbx"
 )
 
-install(
-        EXPORT openfbxTargets
-        FILE openfbxTargets.cmake
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/openfbx
-)
+#install(
+#        EXPORT openfbxTargets
+#        FILE openfbxTargets.cmake
+#        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/openfbx
+#)
 
 install(FILES ${CMAKE_SOURCE_DIR}/src/ofbx.h
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
