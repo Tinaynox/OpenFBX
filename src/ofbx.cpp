@@ -2051,7 +2051,8 @@ struct AnimationLayerImpl : AnimationLayer
 	std::map<std::string, ofbx::IElementProperty*, std::less<>> allProperties;
 	mapProperties(element, allProperties);
 */
-void mapProperties(const ofbx::IElement& parent, std::map<std::string, ofbx::IElementProperty*, std::less<>>& propMap)
+/*
+void mapProperties(const ofbx::IElement& parent, std::map<std::string, ofbx::IElementProperty*, std::less<void>>& propMap)
 {
 	for (const ofbx::IElement* element = parent.getFirstChild(); element; element = element->getSibling())
 	{
@@ -2069,6 +2070,7 @@ void mapProperties(const ofbx::IElement& parent, std::map<std::string, ofbx::IEl
 		if (element->getFirstChild()) mapProperties(*element, propMap);
 	}
 };
+*/
 
 
 void parseVideo(Scene& scene, const Element& element, Allocator& allocator)
