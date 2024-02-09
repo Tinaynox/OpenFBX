@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <vector>
 #include <inttypes.h>
+#include <cstdarg>
 
 
 #if __cplusplus >= 202002L
@@ -18,6 +19,28 @@
 
 namespace ofbx
 {
+    static void logFuncDefault(char const* format, ...)
+    {
+	    va_list args;
+	    va_start(args, format);
+        vfprintf(stdout, format, args);
+	    va_end(args);
+    }
+
+    void (*logCallback)(char const* format, ...) = logFuncDefault;
+
+    void setLogFunc(void (*callback)(char const* format, ...))
+    {
+		logCallback = callback;
+    }
+
+    template <typename TTo>
+    inline TTo readFromStream(u8 const* ptr)
+    {
+        TTo dst;
+		memcpy(&dst, (void const*)ptr, sizeof(TTo));
+        return dst;
+    }
 
 
 struct Allocator {
@@ -568,7 +591,7 @@ static bool decompress(const u8* in, size_t in_size, u8* out, size_t out_size)
 template <typename T> static OptionalError<T> read(Cursor* cursor)
 {
 	if (cursor->current + sizeof(T) > cursor->end) return Error("Reading past the end");
-	T value = *(const T*)cursor->current;
+	T value = readFromStream<T>(cursor->current);
 	cursor->current += sizeof(T);
 	return value;
 }
@@ -2440,8 +2463,8 @@ template <typename T> static bool parseArrayRaw(const Property& property, T* out
 		if (data > property.value.end) return false;
 
 		u32 count = property.getCount();
-		u32 enc = *(const u32*)(property.value.begin + 4);
-		u32 len = *(const u32*)(property.value.begin + 8);
+		u32 enc = readFromStream<u32>(property.value.begin + 4);
+		u32 len = readFromStream<u32>(property.value.begin + 8);
 
 		if (enc == 0)
 		{

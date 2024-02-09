@@ -21,6 +21,7 @@ static_assert(sizeof(i64) == 8, "i64 is not 8 bytes");
 
 using JobFunction = void (*)(void*);
 using JobProcessor = void (*)(JobFunction, void*, void*, u32, u32);
+void setLogFunc(void (*callback)(char const* format, ...));
 
 // Ignoring certain nodes will only stop them from being processed not tokenised (i.e. they will still be in the tree)
 enum class LoadFlags : u16
