@@ -3139,7 +3139,11 @@ static OptionalError<Object*> parseGeometry(const Element& element, bool triangu
 	}
 
 	const Element* polys_element = findChild(element, "PolygonVertexIndex");
-	if (!polys_element || !polys_element->first_property) return Error("Indices missing");
+	if (!polys_element || !polys_element->first_property)
+	{
+        // Not a real mesh - skip
+		return geom; // return Error("Indices missing");
+	}
 
 	std::vector<Vec3> vertices;
 	std::vector<int> original_indices;
